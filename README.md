@@ -11,7 +11,7 @@ after to execute the program you should activate mongodb and before you can star
 First, clone the repo
 
 ```sh
-[git clone https://github.com/FaztWeb/first-node-express-app](https://github.com/JhenyC/PLUVIA-PROYECT.git)
+https://github.com/JhenyC/PLUVIA-PROYECT.git
 ```
 install dependencies:
 
