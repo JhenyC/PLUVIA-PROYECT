@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Página de Tabla</title>
+  <%- include("partials/headadmin") %>
+    <%- include("partials/head") %>
+
+</head>
+
+<body style="  background-image: url('/img/fondo.png')">
+  <!-- Incluye la barra de navegación -->
+  <%- include("partials/navigation") %>
+    <div class="row">
+      <!-- Columna de opciones -->
+
+      <div class="col-md-2">
+        <div class="card">
+          <h3 class="card-title">OPCIONES</h3>
+          <div class="card-header">
+            <div class="card-tools">
+              <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                <i class="fas fa-minus"></i>
+              </button>
+              <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="btn-group-vertical btn-block">
+              <button type="button" class="btn btn-outline-secondary" id="refreshButton">Tabla Cronológica</button>
+              <button type="button" class="btn btn-outline-secondary" id="refreshHumedadButton">Actualizar
+                Humedad[%]</button>
+              <button type="button" class="btn btn-outline-secondary" id="refreshTiempoButton">Actualizar
+                Tiempo[horas]</button>
+              <button type="button" class="btn btn-outline-secondary" id="refreshTemperaturaButton">Actualizar
+                Temperatura[°C]</button>
+              <button type="button" class="btn btn-outline-secondary" id="refreshTemperatura2Button">Actualizar
+                Temperatura2[%]</button>
+              <button type="button" class="btn btn-outline-secondary" id="refreshHumedad2Button">Actualizar
+                Humedad2[%]</button>
+              <button type="button" class="btn btn-outline-secondary" id="refreshRain1Button">Actualizar
+                Rain1[mm]</button>
+              <button type="button" class="btn btn-outline-secondary" id="refreshRain2Button">Actualizar
+                Rain2[mm]</button>
+              <button type="button" class="btn btn-outline-secondary" id="refreshcamara1Button">Actualizar
+                camara1[Segmentacion]</button>
+              <button type="button" class="btn btn-outline-secondary" id="refreshcamara2Button">Actualizar
+                camara2[segmentacion]]</button>
+              <button type="button" class="btn btn-outline-secondary" id="downloadCsvButton">Descargar CSV</button>
+            </div>
+            <div class="btn-group-vertical btn-block">
+              <!-- Botones actuales... -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Columna para las tablas -->
+      <div class="col-md-8">
+        <div class="content">
+          <!-- Primera tabla -->
+          <div class="container mt-4">
+            <h1>Tabla de Datos</h1>
+            <div class="table-responsive">
+              <table id="dataTable" class="table">
+                <thead>
+                  <tr>
+                    <th>FECHA DE CONSULTA</th>
+                    <th>Valor</th>
+                  </tr>
+                </thead>
+                <tbody id="dataBody"></tbody>
+              </table>
+            </div>
+
+          </div>
+
+          <!-- Segunda tabla -->
+          <div class="container mt-4">
+            <h1>Tabla de Datos Cronológica</h1>
+            <div class="table-responsive">
+              <table class="table table-striped" id="allDataTable">
+                <thead>
+                  <tr>
+                    <th>Timestamp</th>
+                    <th>Tiempo</th>
+                    <th>Temperatura <br>Rio La Paz[°C]</th>
+                    <th>Temperatura2[°C]</th>
+                    <th>Humedad <br>Rio La Paz[%]</th>
+                    <th>Humedad2[%]</th>
+                    <th>Pluviometro<br>Rio La Paz[mm]</th>
+                    <th>Pluviometro[mm]</th>
+                  </tr>
+                </thead>
+                <tbody id="allDataBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+</body>
+
+
+
+
+
+
+
+
+<!-- Incluye la biblioteca de Socket.IO -->
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  // Crea una instancia de Socket.IO
+  const socket = io();
+
+  // Obtiene elementos del DOM
+  //datos primera
+  const dataTable = document.getElementById('dataTable');
+  const dataBody = document.getElementById('dataBody');
+  const refreshButton = document.getElementById('refreshButton');
+  const refreshHumedadButton = document.getElementById('refreshHumedadButton');
+  const refreshTiempoButton = document.getElementById('refreshTiempoButton');
+  const refreshTemperaturaButton = document.getElementById('refreshTemperaturaButton');
+  const refreshTemperatura2Button = document.getElementById('refreshTemperatura2Button');
+  const refreshHumedad2Button = document.getElementById('refreshHumedad2Button');
+  const refreshRain1Button = document.getElementById('refreshRain1Button');
+  const refreshRain2Button = document.getElementById('refreshRain2Button');
+  const refreshcamara1Button = document.getElementById('refreshcamara1Button');
+  const refreshcamara2Button = document.getElementById('refreshcamara2Button');
+  const downloadCsvButton = document.getElementById('downloadCsvButton');
+
+  // Eventos de Socket.IO
+
+  //------------socket.on para todos los datos
+  socket.on('allData', (allData) => {
+    console.log("Datos recibidos: ", allData); // Añade esto para depuración
+    updateAllDataTable(allData);
+  });
+
+  socket.on('latestDataByTopic', (data) => {
+    updateDataTable(data, data.topic);
+  });
+  // ---NO TOCAR--------Maneja clic en los botones para actualizar datos por tópico específico
+  // Maneja clic en el botón para descargar CSV
+  downloadCsvButton.addEventListener('click', () => {
+  // Muestra una notificación de descarga en proceso
+  const notification = document.createElement('div');
+  notification.textContent = 'Descargando archivo CSV...';
+  notification.classList.add('download-notification');
+  document.body.appendChild(notification);
+
+  // Emitir el evento al servidor para solicitar la descarga
+  socket.emit('requestCsvDownload');
+
+  // Escuchar el evento del servidor para indicar que el archivo CSV está listo
+  socket.on('csvFileReady', (csvFileName) => {
+    // Redirigir la ventana actual a la URL de descarga
+    window.location.href = `/download-csv/${csvFileName}`;
+    // Ocultar la notificación de descarga en proceso
+    notification.remove();
+  });
+});
+  // Maneja clic en el botón "Actualizar Todo"
+  refreshButton.addEventListener('click', () => {
+    socket.emit('requestUpdateAllData'); // Solicita al servidor todos los datos
+  });
+  refreshHumedadButton.addEventListener('click', () => {
+    socket.emit('getLatestDataByTopic', 'monitoreo/Humedad');
+  });
+
+  refreshTiempoButton.addEventListener('click', () => {
+    socket.emit('getLatestDataByTopic', 'monitoreo/Tiempo');
+  });
+
+  refreshTemperaturaButton.addEventListener('click', () => {
+    socket.emit('getLatestDataByTopic', 'monitoreo/Temperatura');
+  });
+
+  refreshTemperatura2Button.addEventListener('click', () => {
+    socket.emit('getLatestDataByTopic', 'monitoreo/Temperatura2');
+  });
+
+  refreshHumedad2Button.addEventListener('click', () => {
+    socket.emit('getLatestDataByTopic', 'monitoreo/Humedad2');
+  });
+
+  refreshRain1Button.addEventListener('click', () => {
+    socket.emit('getLatestDataByTopic', 'monitoreo/Rain1');
+  });
+
+  refreshRain2Button.addEventListener('click', () => {
+    socket.emit('getLatestDataByTopic', 'monitoreo/Rain2');
+  });
+  refreshcamara1Button.addEventListener('click', () => {
+    socket.emit('getLatestDataByTopic', 'monitoreo/camara1');
+  });
+
+  refreshcamara2Button.addEventListener('click', () => {
+    socket.emit('getLatestDataByTopic', 'monitoreo/camara2');
+  });
+
+  //--------------FUNCIONES QUE NO DEBO TOCAR XD--------------------------
+  //---------------Función para actualizar la tabla de datos con un tópico específico
+  function updateDataTable(data, topic) {
+    dataBody.innerHTML = ''; // Limpia el cuerpo de la tabla antes de actualizar
+
+    data.data.forEach((item) => {
+      const row = document.createElement('tr');
+
+      // Crea celdas para todas las columnas que deseas mostrar
+      for (const column of ['timestamp', 'value']) {
+        const cell = document.createElement('td');
+        cell.textContent = item[column];
+        row.appendChild(cell);
+      }
+
+      dataBody.appendChild(row);
+    });
+  }
+
+
+  // ------------------Función para actualizar la nueva tabla con todos los datos
+  function updateAllDataTable(data) {
+    console.log(data);
+    const allDataBody = document.getElementById('allDataBody');
+    allDataBody.innerHTML = ''; // Limpia el cuerpo de la tabla antes de actualizar
+
+    data.forEach((item) => {
+      const maxValuesLength = Math.max(...Object.values(item).map(val => Array.isArray(val) ? val.length : 0));
+
+      for (let i = 0; i < maxValuesLength; i++) {
+        const row = document.createElement('tr');
+
+        // Celda para el Timestamp
+        const timestampCell = document.createElement('td');
+        timestampCell.textContent = item.timestamp;
+        row.appendChild(timestampCell);
+
+        // Celdas para cada tópico
+        const topics = [
+          "monitoreo/tiempo",
+          "monitoreo/Temperatura",
+          "monitoreo/Temperatura2",
+          "monitoreo/Humedad",
+          "monitoreo/Humedad2",
+          "monitoreo/Rain1",
+          "monitoreo/Rain2",
+          "monitoreo/camara1",
+          "monitoreo/camara2",
+          "motor/control/1",
+          "motor/control/2"
+
+        ];
+
+        topics.forEach(topic => {
+          const cell = document.createElement('td');
+          // Comprueba si existe un valor en la posición actual del array
+          if (item[topic] && item[topic][i] !== undefined) {
+            cell.textContent = item[topic][i];
+          } else {
+            // Si no hay valor para esta posición, usa 'N/A'
+            cell.textContent = 'N/A';
+          }
+          row.appendChild(cell);
+        });
+
+        allDataBody.appendChild(row);
+      }
+    });
+  }
+
+</script>
+</body>
+
+</html>

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Monitoring Page</title>
+  <%- include("partials/head") %>
+    <%- include("partials/headadmin") %>
+      <%- include("partials/stream") %>
+</head>
+
+<body>
+  <%- include("partials/navigation") %>
+
+    <div class="col-md-12" style="  background-image: url('/img/fondo.png')" ; /* Cambia esto por la ruta de tu imagen
+      */ background-size: cover; background-position: center;">
+      <div class="card-header text-white text-center">
+        <h3>MONITOREO RIO LA PAZ</h3>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <!--TEMPERATURA 1-->
+          <div class="card card-info">
+            <div class="card-header">
+              <h3 class="card-title">Temperatura Zona1 [°C]</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="chart">
+                <canvas id="temperatura" min-height: 250px; height: 250px; max-height: 250px; max-width:
+                  100%;"></canvas>
+              </div>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- TEMPERATURA 2-->
+          <div class="card card-info">
+            <div class="card-header">
+              <h3 class="card-title">Temperatura Zona2[°C]</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="chart">
+                <canvas id="temperatura2" min-height: 250px; height: 250px; max-height: 250px; max-width:
+                  100%;"></canvas>
+              </div>
+            </div>
+            <!-- /.card-body -->
+          </div>
+        </div>
+        <!-- /.col (LEFT) -->
+        <div class="col-md-6">
+          <!--HUMEDAD1-->
+          <div class="card card-info">
+            <div class="card-header">
+              <h3 class="card-title">Humedad Zona1[%]</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="chart">
+                <canvas id="humedad" min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+              </div>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+
+          <!-- HUMEDAD2 -->
+          <div class="card card-info">
+            <div class="card-header">
+              <h3 class="card-title">Humedad Zona2 [%]</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="chart">
+                <canvas id="humedad2" min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+              </div>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+          <!-- /.card -->
+
+        </div>
+        <!-- /.col (RIGHT) -->
+      </div>
+
+      <!--GRAFICA RAINGUAGE-->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <i class="far fa-chart-bar"></i>
+            SENSORES ACTIVOS  EN TIEMPO REAL
+          </h3>
+
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+              <i class="fas fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-tool" data-card-widget="remove">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+          <div class="row justify-content-center align-items-center">
+
+            <!-- ./col -->
+            <div class="col-6 col-md-3 text-center">
+              <input type="text" class="knob" value="0" id="knob2" data-width="90" data-height="90"
+                data-fgColor="#f56954">
+              <div class="knob-label">Temperatura Zona2</div>
+
+              <input type="text" class="knob" value="0"  id="knob4" data-width="100" data-height="100" data-fgColor="#932ab6">
+  
+              <div class="knob-label">Humedad Zona2</div>
+            </div>
+            <!-- ./col -->
+            <div class="col-8 col-md-3 text-center">
+              <input type="text" class="knob" id="knob1" value="0" data-width="90" data-height="90"
+              data-fgColor="#00c0ef">
+            <div class="knob-label">Temperatura Zona1</div>
+
+
+              <input type="text" class="knob" value="0" id="knob3" data-min="-150" data-max="150" data-width="90"
+                data-height="90" data-fgColor="#00a65a">
+
+              <div class="knob-label">Humedad Zona1</div>
+            </div>
+            <!-- ./col -->
+            <div class="col-6 col-md-3 text-center">
+              
+              <input type="text" class="knob" value="0" id="knob5" data-width="90" data-height="90" data-fgColor="#00c0ef">
+
+              <div class="knob-label">Pluviometro Zona1[mm3]</div>
+              <input type="text" class="knob" value="0"  id="knob6" data-width="100" data-height="100" data-fgColor="#39CCCC">
+  
+              <div class="knob-label">Pluviometro Zona2[mm3]</div>
+          
+            </div>
+            <!-- ./col -->
+          </div>
+          <!-- /.row -->
+
+          <div class="row">
+            <div class="col-6 col-md-3 text-center">
+ 
+            </div>
+            <!-- ./col -->
+            <div class="col-6 col-md-3 text-center">
+            
+            </div>
+
+          </div>
+
+
+
+          <!-- /.row -->
+        </div>
+        <!-- /.card-body -->
+      </div>
+    </div>
+    <!---------------------------->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script>
+      const socket = io();
+
+      const ctx1 = document.getElementById('temperatura').getContext('2d');
+      const ctx2 = document.getElementById('temperatura2').getContext('2d');
+      const ctx3 = document.getElementById('humedad').getContext('2d');
+      const ctx4 = document.getElementById('humedad2').getContext('2d');
+
+      const data1 = {
+        datasets: [{
+          label: 'Temperatura[°C]',
+          borderColor: 'rgb(75, 192, 192)',
+          data: [],
+        }]
+      };
+
+      const data2 = {
+        datasets: [{
+          label: 'Temperatura[°C]',
+          borderColor: 'rgb(255, 0, 0)',
+          data: [],
+        }]
+      };
+
+      const data3 = {
+        datasets: [{
+          label: 'Humedad[%]',
+          borderColor: 'rgb(0, 128, 0)',
+          data: [],
+        }]
+      };
+
+      const data4 = {
+        datasets: [{
+          label: 'Humedad[%]',
+          borderColor: 'rgb(128, 0, 128)',
+          data: [],
+        }]
+      };
+
+      const config1 = createConfig(data1);
+      const config2 = createConfig(data2);
+      const config3 = createConfig(data3);
+      const config4 = createConfig(data4);
+
+      const chart1 = new Chart(ctx1, config1);
+      const chart2 = new Chart(ctx2, config2);
+      const chart3 = new Chart(ctx3, config3);
+      const chart4 = new Chart(ctx4, config4);
+
+      socket.on("temperatura", (value) => {
+        updateData(data1, value, chart1);
+        $('#knob1').val(value).trigger('change');
+      });
+
+
+      socket.on("temperatura2", (value) => {
+        updateData(data2, value, chart2);
+        $('#knob2').val(value).trigger('change');
+
+      });
+
+      socket.on("humedad", (value) => {
+        updateData(data3, value, chart3);
+        $('#knob3').val(value).trigger('change');
+      });
+
+      socket.on("humedad2", (value) => {
+        updateData(data4, value, chart4);
+        $('#knob4').val(value).trigger('change');
+      });
+      socket.on("Rain1", (value) => {
+        $('#knob5').val(value).trigger('change');
+      });
+      socket.on("Rain2", (value) => {
+        $('#knob6').val(value).trigger('change');
+      });
+
+      function createConfig(data) {
+        return {
+          type: 'line',
+          data: data,
+          options: {
+            scales: {
+              x: {
+                type: 'linear',
+                position: 'bottom',
+                ticks: {
+                  callback: function (value, index, values) {
+                    return moment(value).format('HH:mm:ss');
+                  }
+                }
+              },
+              y: {
+                type: 'linear',
+                position: 'left'
+              }
+            }
+          }
+        };
+      }
+
+      function updateData(data, value, chart) {
+        const time = new Date().getTime();
+        data.datasets[0].data.push({ x: time, y: value });
+        updateChart(chart);
+      }
+
+      function updateChart(chart) {
+        const maxDataPoints = 10;
+        if (chart.data.datasets[0].data.length > maxDataPoints) {
+          chart.data.datasets[0].data.shift();
+        }
+        chart.update();
+      }
+    </script>
+    <!--para raingagauge-->
+    <script>
+      $(function () {
+        // Inicialización de todos los knobs
+        $('.knob').knob({
+          'min': 0,
+          'max': 100,
+          'step': 1,
+          'angleOffset': -125,
+          'angleArc': 250,
+          'fgColor': "#3c8dbc"
+        });
+
+        // Escuchar cambios en los datos de cada tópico y actualizar el knob correspondiente
+        socket.on("temperatura", (value) => updateKnobValue('#knob1', value));
+        socket.on("temperatura2", (value) => updateKnobValue('#knob2', value));
+        socket.on("humedad", (value) => updateKnobValue('#knob3', value));
+        socket.on("humedad2", (value) => updateKnobValue('#knob4', value));
+        socket.on("Rain1", (value) => updateKnobValue('#knob5', value));
+        socket.on("Rain2", (value) => updateKnobValue('#knob6', value));
+        // Repite para los demás tópicos (humedad3, humedad4, humedad5, humedad6)
+
+        // Función para actualizar el valor del knob específico
+        function updateKnobValue(knobId, value) {
+          $(knobId).val(value).trigger('change');
+        }
+      });
+    </script>
+</body>
+
+</html>

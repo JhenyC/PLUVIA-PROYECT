@@ -1,18 +1,75 @@
-body {
-  background: #202020;
-  color: white;
-}
+
 
 .navbar-brand {
   font-family: 'Spicy Rice', cursive;
   font-size: 1.5rem;
+  color: #ffffff; /* Blanco */
 }
 
 .nav-link {
   text-transform: uppercase;
   font-family: 'Spicy Rice', cursive;
+  color: #ffffff; /* Blanco */
 }
 
 header img {
   width: 60%;
+  display: block;
+  margin: 0 auto;
+}
+
+canvas {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 10px; /* Esquinas redondeadas */
+}
+
+h1 {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 2rem;
+  color: #333; /* Color de texto oscuro */
+}
+
+
+/* Otros estilos para mejorar la presentación según tus necesidades */
+.chart-container {
+  width: 600px; /* Ajusta el ancho según tus preferencias */
+  height: 250px; /* Ajusta la altura según tus preferencias */
+  float: left; /* Coloca dos gráficos por fila */
+  margin: 10px; /* Agrega margen entre los gráficos */
+  background-color: #a9f0e6;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  overflow: hidden;
+}
+.chart-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 10px;
+  color: #333;
+}
+#streamContainer {
+  border: 2px solid #4682b4; /* Azul acero */
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #fff; /* Blanco */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+#streamTitle {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #4682b4; /* Azul acero */
+}
+
+#localVideo {
+  width: 100%;
+  border: 2px solid #87ceeb; /* Azul cielo */
+  border-radius: 10px;
+}
+input[type="range"] {
+  width: 80%;
+  margin: 10px 0;
 }

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, ">
+  <title>AdminLTE 3 | Top Navigation</title>
+
+  <%- include("partials/headadmin") %>
+      <%- include("partials/head") %>
+        <title>Streaming Page</title>
+
+</head>
+
+<body style="  background-image: url('/img/fondo.png')">
+  <%- include("partials/navigation") %>
+    <div class="container">
+
+      <div class="row">
+        <!-- Columna para la cámara 1 -->
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Cámara 1</h3>
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <!-- Botones para la cámara 1 -->
+              <div class="btn-group-vertical btn-block">
+                <div class="cameraControlTitle stylized">POSICIONES DISPONIBLES Cámara 1</div>
+                <div class="btn-group" role="group">
+                  <button type="button" class="btn btn-primary" onclick="setCameraAngle(1, 60)">Vista Frontal</button>
+                  <button type="button" class="btn btn-secondary" onclick="setCameraAngle(1, 30)">Lateral
+                    Derecha</button>
+                  <button type="button" class="btn btn-success" onclick="setCameraAngle(1, 90)">Lateral
+                    Izquierda</button>
+                </div>
+              </div>
+              <div class="progress-group">
+                Valores de Segmentacion Camara Zona1
+                <span class="float-right" id="rain1Value"><b>0</b>/65536</span>
+                <div class="progress progress-sm">
+                  <div class="progress-bar bg-primary" id="rain1ProgressBar" style="width: 0%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna para la cámara 2 -->
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Cámara 2</h3>
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <!-- Botones para la cámara 2 -->
+              <div class="btn-group-vertical btn-block">
+
+                <div class="cameraControlTitle">POSICIONES DISPONIBLES Cámara 2</div>
+                <div class="btn-group" role="group">
+                  <button type="button" class="btn btn-primary" onclick="setCameraAngle(2, 60)">Vista Frontal</button>
+                  <button type="button" class="btn btn-secondary" onclick="setCameraAngle(2, 30)">Lateral
+                    Derecha</button>
+                  <button type="button" class="btn btn-success" onclick="setCameraAngle(2, 90)">Lateral
+                    Izquierda</button>
+                </div>
+              </div>
+              <div class="progress-group">
+                Valores de Segmentacion Camara Zona2
+                <span class="float-right" id="rain2Value"><b>0</b>/65536</span>
+                <div class="progress progress-sm">
+                  <div class="progress-bar bg-danger" id="rain2ProgressBar" style="width: 0%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+    <script>
+      const socket = io();
+
+      const motor1Slider = document.getElementById('motor1Slider');
+      const motor2Slider = document.getElementById('motor2Slider');
+
+      function setCameraAngle(motor, angle) {
+        socket.emit('control-motor', { motor, angle });
+        console.log(`Motor: ${motor}, Ángulo: ${angle}`);
+      }
+      //para valores de la camara
+      // Escuchar los valores de Rain1 y Rain2 desde el servidor
+
+      socket.on("camara1", (rain1Value) => {
+      console.log("Valor Rain1 recibido:", rain1Value); // Para depuración
+      updateProgressBar('#rain1ProgressBar', '#rain1Value', rain1Value, 65536);
+      updateAlertMessage('#alertMessageCam1', rain1Value, 30);
+    });
+
+    socket.on("camara2", (rain2Value) => {
+      console.log("Valor Rain2 recibido:", rain2Value); // Para depuración
+      updateProgressBar('#rain2ProgressBar', '#rain2Value', rain2Value, 65536);
+      updateAlertMessage('#alertMessageCam2', rain2Value, 30);
+    });
+
+    function updateProgressBar(progressBarId, valueId, value, maxValue) {
+      const percentage = (value / maxValue) * 100;
+      $(progressBarId).css('width', percentage + '%');
+      $(valueId).html(`<b>${value}</b>/${maxValue}`);
+    }
+
+    function updateAlertMessage(alertId, value, threshold) {
+  console.log("Actualizando alerta para", alertId, "con valor", value); // Para depuración
+  const labelId = alertId.replace('alertMessage', 'statusLabel');
+  if (value > threshold) {
+    $(labelId).text('¡Alerta de riesgo!').css('color', 'red');
+    // Muestra un mensaje de alerta
+    alert('¡Alerta de riesgo! El valor ha superado el umbral en ' + alertId);
+  } else {
+    $(labelId).text('Sin alerta de riesgo.').css('color', 'green');
+  }
+}
+
+    </script>
+</body>
+
+</html>

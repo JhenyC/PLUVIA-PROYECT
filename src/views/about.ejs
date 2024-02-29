@@ -5,32 +5,43 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= title %></title>
-    <%- include("partials/head") %>
+    <%- include("partials/headadmin") %>
+
+<style>
+  p {
+  font-family:Impact, Haettenschweiler, 'Arial Narrow Bold'; /* Tipo de letra */
+    color: #0a0a0a3b; /* Color del texto */
+    line-height: 1.6; /* Espaciado entre líneas */
+    text-align: center; /* Alineación del texto */
+    font-size: 18px; /* Tamaño del texto */
+    
+}
+</style>
   </head>
-  <body>
+  
+  <body style="  background-image: url('/img/fondo.png'); /* Cambia esto por la ruta de tu imagen */
+  background-size: cover;
+  background-position: center;">
     <!-- HEADER -->
     <%- include("partials/navigation") %>
+    <%- include("partials/headadmin") %>
 
     <!-- My Content -->
     <main
-      class="container pt-2 text-center d-flex justify-content-center align-items-center vh-100"
+      class="container pt-2 text-center d-flex justify-content-center align-items-center vh-100 "
     >
       <section>
-        <h1 class="display-1">About</h1>
+        <h1 class="display-2" style="font-weight: bold; /* Aplicar negrita */">ABOUT</h1>
 
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit excepturi
-          repellat quod perspiciatis nostrum ipsam blanditiis libero labore
-          placeat distinctio, ipsa sed, in consequatur enim maxime! Sapiente
-          neque autem aliquid! Esse repellat sint nam ipsum debitis quibusdam
-          nemo ipsam dicta nesciunt vero officia facilis laboriosam minima
-          suscipit, nihil amet doloremque saepe maiores a adipisci dolorum
-          eveniet enim? Unde cupiditate error quas doloremque, tempora
-          asperiores quibusdam ipsam enim sequi pariatur esse, tenetur
-          consequuntur autem! Ut, rem cupiditate ea dolorum ipsum quia animi
-          odit ipsa. Magni, modi minima. Velit assumenda culpa obcaecati sit,
-          ipsam praesentium facilis beatae illum nobis animi consequatur
-          perspiciatis?
+        <p>Bienvenidos a Pluvia, un proyecto liderado por estudiantes de ingeniería mecatrónica 
+          enfocados en utilizar la tecnología para prevenir riesgos de inundaciones. En Pluvia, 
+          
+          implementamos sistemas avanzados de monitoreo en áreas críticas para ofrecer alertas 
+          tempranas y precisas. Nuestro enfoque se centra en el bienestar comunitario y la innovación 
+          tecnológica, incluyendo sistemas de monitoreo de humedad y temperatura en tiempo real, 
+          complementados con cámaras de control remoto. Pluvia representa nuestra pasión por la tecnología 
+          y nuestro compromiso con la seguridad y el bienestar social.
+
         </p>
       </section>
     </main>
